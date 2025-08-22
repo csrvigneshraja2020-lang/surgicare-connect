@@ -1,66 +1,75 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { 
   User,
-  Heart,
-  FileText,
-  Phone,
   Settings,
   Languages,
   Bell,
   Shield,
-  Download,
-  MapPin,
-  Calendar,
-  AlertTriangle,
-  Building2
+  Heart,
+  FileText,
+  Phone,
+  Building2,
+  Edit,
+  Plus,
+  Info
 } from "lucide-react";
 
 export const ProfileScreen = () => {
-  const patientProfile = {
-    name: "Rajesh Kumar",
-    age: 34,
-    gender: "Male",
-    bloodGroup: "O+",
-    phone: "+91 98765 43210",
-    emergencyContact: "Priya Kumar (Wife) - +91 98765 43211",
-    address: "Bandra, Mumbai, Maharashtra",
-    procedure: "Laparoscopic Appendectomy",
-    surgeon: "Dr. Priya Sharma",
-    hospital: "Apollo Hospital, Mumbai",
-    admissionDate: "Jan 20, 2025",
-    dischargeDate: "Jan 21, 2025"
-  };
-
-  const healthData = [
-    { label: "Allergies", value: "Penicillin, Shellfish", status: "critical" },
-    { label: "Chronic Conditions", value: "Hypertension", status: "warning" },
-    { label: "Blood Group", value: "O+ Positive", status: "normal" },
-    { label: "Last BMI", value: "24.5 (Normal)", status: "normal" }
-  ];
-
-  const menuSections = [
+  const profileSections = [
+    {
+      title: "Personal Information",
+      items: [
+        { icon: User, label: "Basic Details", status: "incomplete", action: "Complete Setup" },
+        { icon: Heart, label: "Medical History", status: "empty", action: "Add Info" },
+        { icon: Phone, label: "Emergency Contacts", status: "empty", action: "Add Contact" },
+        { icon: Building2, label: "Hospital Connection", status: "empty", action: "Connect" }
+      ]
+    },
     {
       title: "Health Records",
       items: [
-        { icon: FileText, label: "Discharge Summary", action: "View PDF" },
-        { icon: Heart, label: "Medical History", action: "View Details" },
-        { icon: Download, label: "Lab Reports", action: "Download" },
-        { icon: Calendar, label: "Previous Surgeries", action: "View Timeline" }
+        { icon: FileText, label: "Discharge Summary", status: "empty", action: "Upload" },
+        { icon: Heart, label: "Allergies & Conditions", status: "empty", action: "Add" }
       ]
     },
     {
       title: "App Settings",
       items: [
-        { icon: Languages, label: "Language", action: "English", detail: "Hindi, Tamil available" },
-        { icon: Bell, label: "Notifications", action: "Manage" },
-        { icon: Shield, label: "Privacy & Data", action: "Settings" },
-        { icon: Settings, label: "App Preferences", action: "Configure" }
+        { icon: Languages, label: "Language", status: "set", action: "English", detail: "Change" },
+        { icon: Bell, label: "Notifications", status: "default", action: "Configure" },
+        { icon: Shield, label: "Privacy & Data", status: "default", action: "Review" },
+        { icon: Settings, label: "Preferences", status: "default", action: "Customize" }
       ]
     }
   ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "incomplete":
+        return "text-warning";
+      case "empty":
+        return "text-muted-foreground";
+      case "set":
+        return "text-success";
+      default:
+        return "text-muted-foreground";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "incomplete":
+        return <Edit size={12} className="text-warning" />;
+      case "empty":
+        return <Plus size={12} className="text-muted-foreground" />;
+      case "set":
+        return <div className="w-2 h-2 bg-success rounded-full" />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="pb-20 bg-gradient-calm min-h-screen">
@@ -69,119 +78,86 @@ export const ProfileScreen = () => {
         <div className="flex items-center space-x-4">
           <Avatar className="h-16 w-16 border-2 border-primary-foreground/30">
             <AvatarFallback className="bg-white/20 text-primary-foreground text-lg font-semibold">
-              {patientProfile.name.split(' ').map(n => n[0]).join('')}
+              ?
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <h1 className="text-xl font-semibold">{patientProfile.name}</h1>
+            <h1 className="text-xl font-semibold">Complete Your Profile</h1>
             <p className="text-primary-foreground/80">
-              {patientProfile.age} years • {patientProfile.gender} • {patientProfile.bloodGroup}
+              Help us personalize your recovery experience
             </p>
-            <div className="flex items-center space-x-2 mt-1">
-              <Building2 size={14} />
-              <span className="text-sm text-primary-foreground/80">{patientProfile.hospital}</span>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Current Recovery */}
+        {/* Setup Progress */}
         <Card className="p-4 shadow-card">
-          <h2 className="font-semibold text-card-foreground mb-3">Current Recovery</h2>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Procedure</span>
-              <span className="font-medium">{patientProfile.procedure}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Surgeon</span>
-              <span className="font-medium">{patientProfile.surgeon}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Surgery Date</span>
-              <span className="font-medium">{patientProfile.admissionDate}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Recovery Day</span>
-              <Badge className="bg-primary text-primary-foreground">Day 3</Badge>
-            </div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-semibold text-card-foreground">Setup Progress</h2>
+            <span className="text-sm text-muted-foreground">2/8 complete</span>
           </div>
+          <div className="w-full bg-muted rounded-full h-2">
+            <div className="bg-gradient-primary h-2 rounded-full w-1/4 transition-all duration-300"></div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-2">
+            Complete your profile to get personalized recovery recommendations
+          </p>
         </Card>
 
-        {/* Health Information */}
-        <Card className="p-4 shadow-card">
-          <h2 className="font-semibold text-card-foreground mb-3">Health Information</h2>
-          <div className="space-y-3">
-            {healthData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <span className="text-muted-foreground">{item.label}</span>
-                <div className="flex items-center space-x-2">
-                  <span className="font-medium text-right">{item.value}</span>
-                  {item.status === "critical" && (
-                    <AlertTriangle size={16} className="text-danger" />
-                  )}
-                  {item.status === "warning" && (
-                    <AlertTriangle size={16} className="text-warning" />
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-4">
+          <Card className="p-4 text-center hover:shadow-card transition-all duration-200 cursor-pointer">
+            <User className="h-8 w-8 text-primary mx-auto mb-2" />
+            <h3 className="font-medium text-sm">Add Details</h3>
+            <p className="text-xs text-muted-foreground">Name, age, contacts</p>
+          </Card>
+          
+          <Card className="p-4 text-center hover:shadow-card transition-all duration-200 cursor-pointer">
+            <Building2 className="h-8 w-8 text-primary mx-auto mb-2" />
+            <h3 className="font-medium text-sm">Connect Hospital</h3>
+            <p className="text-xs text-muted-foreground">Sync medical records</p>
+          </Card>
+        </div>
 
-        {/* Emergency Contact */}
-        <Card className="p-4 bg-warning-soft border-warning">
-          <div className="flex items-start space-x-3">
-            <Phone size={20} className="text-warning mt-0.5" />
-            <div className="flex-1">
-              <h3 className="font-medium text-warning-foreground">Emergency Contact</h3>
-              <p className="text-sm text-warning-foreground/80 mt-1">
-                {patientProfile.emergencyContact}
-              </p>
-            </div>
-            <Button size="sm" className="bg-warning hover:bg-warning/90">
-              Call
-            </Button>
-          </div>
-        </Card>
-
-        {/* Menu Sections */}
-        {menuSections.map((section, sectionIndex) => (
+        {/* Profile Sections */}
+        {profileSections.map((section, sectionIndex) => (
           <Card key={sectionIndex} className="p-4 shadow-card">
             <h2 className="font-semibold text-card-foreground mb-3">{section.title}</h2>
             <div className="space-y-3">
               {section.items.map((item, index) => (
                 <div key={index} className="flex items-center justify-between py-2">
                   <div className="flex items-center space-x-3">
-                    <item.icon size={20} className="text-muted-foreground" />
+                    <item.icon size={20} className={getStatusColor(item.status)} />
                     <div>
-                      <p className="font-medium">{item.label}</p>
+                      <p className="font-medium text-sm">{item.label}</p>
                       {item.detail && (
-                        <p className="text-sm text-muted-foreground">{item.detail}</p>
+                        <p className="text-xs text-muted-foreground">{item.detail}</p>
                       )}
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-primary">
-                    {item.action}
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    {getStatusIcon(item.status)}
+                    <Button variant="ghost" size="sm" className="text-primary text-xs">
+                      {item.action}
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
           </Card>
         ))}
 
-        {/* Contact Info */}
-        <Card className="p-4 shadow-card">
-          <h2 className="font-semibold text-card-foreground mb-3">Contact Information</h2>
-          <div className="space-y-3">
-            <div className="flex items-center space-x-3">
-              <Phone size={16} className="text-muted-foreground" />
-              <span className="font-medium">{patientProfile.phone}</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin size={16} className="text-muted-foreground" />
-              <span className="font-medium">{patientProfile.address}</span>
+        {/* Help */}
+        <Card className="p-4 bg-primary-soft border-primary">
+          <div className="flex items-start space-x-3">
+            <Info size={20} className="text-primary mt-0.5" />
+            <div>
+              <h3 className="font-medium text-primary-foreground">Need Help?</h3>
+              <p className="text-sm text-primary-foreground/80 mt-1">
+                Your data is secure and used only to personalize your recovery plan. 
+                You can update or remove information anytime.
+              </p>
             </div>
           </div>
         </Card>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { OnboardingScreen } from "@/screens/OnboardingScreen";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ChatScreen } from "@/screens/ChatScreen";
 import { PlanScreen } from "@/screens/PlanScreen";
@@ -7,6 +8,15 @@ import { ProfileScreen } from "@/screens/ProfileScreen";
 
 const SurgiNextApp = () => {
   const [activeTab, setActiveTab] = useState("home");
+  const [isOnboarded, setIsOnboarded] = useState(false);
+
+  const handleOnboardingComplete = () => {
+    setIsOnboarded(true);
+  };
+
+  if (!isOnboarded) {
+    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+  }
 
   const renderScreen = () => {
     switch (activeTab) {

@@ -1,57 +1,63 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
 import { 
   Calendar,
-  Clock,
+  Plus,
+  FileText,
+  Building2,
+  Stethoscope,
   Pill,
   Dumbbell,
   UtensilsCrossed,
-  Stethoscope,
-  FileText,
-  CheckCircle2,
-  AlertCircle,
-  MapPin
+  Clock
 } from "lucide-react";
 
 export const PlanScreen = () => {
-  const [selectedDay, setSelectedDay] = useState(3);
-  
-  const recoveryPlan = {
-    procedure: "Laparoscopic Appendectomy",
-    surgeon: "Dr. Priya Sharma",
-    hospital: "Apollo Hospital, Mumbai",
-    daysSinceOp: 3,
-    totalDays: 14
-  };
+  const setupOptions = [
+    {
+      icon: Building2,
+      title: "Connect Hospital",
+      description: "Link your hospital account for automatic plan sync",
+      action: "Connect Now",
+      primary: true
+    },
+    {
+      icon: FileText,
+      title: "Upload Discharge Summary",
+      description: "Add your discharge papers to create personalized plan",
+      action: "Upload PDF",
+      primary: false
+    },
+    {
+      icon: Plus,
+      title: "Manual Setup",
+      description: "Create your recovery plan step by step",
+      action: "Start Setup",
+      primary: false
+    }
+  ];
 
-  const dayPlan = {
-    medications: [
-      { name: "Paracetamol 500mg", timing: "8 AM, 2 PM, 8 PM", withFood: true, remaining: 12 },
-      { name: "Omeprazole 20mg", timing: "Before breakfast", withFood: false, remaining: 8 }
-    ],
-    exercises: [
-      { name: "Deep Breathing", duration: "5 minutes", frequency: "Every 2 hours", difficulty: "Easy" },
-      { name: "Gentle Walking", duration: "10 minutes", frequency: "2x daily", difficulty: "Easy" }
-    ],
-    diet: [
-      { meal: "Breakfast", items: ["Upma with vegetables", "Buttermilk", "Banana"], time: "8 AM" },
-      { meal: "Lunch", items: ["Dal rice", "Steamed vegetables", "Curd"], time: "1 PM" },
-      { meal: "Dinner", items: ["Khichdi", "Ghee", "Warm milk"], time: "7 PM" }
-    ],
-    appointments: [
-      { type: "Follow-up", doctor: "Dr. Priya Sharma", date: "Jan 25", time: "10 AM", location: "Apollo Hospital" },
-      { type: "Stitch Removal", doctor: "Nurse Station", date: "Jan 28", time: "3 PM", location: "Apollo Hospital" }
-    ]
-  };
-
-  const milestones = [
-    { day: 1, title: "Surgery Day", completed: true, description: "Rest and monitor vitals" },
-    { day: 3, title: "Mobile Recovery", completed: true, description: "Start gentle walking" },
-    { day: 7, title: "Increased Activity", completed: false, description: "Resume light activities" },
-    { day: 14, title: "Full Recovery", completed: false, description: "Return to normal routine" }
+  const planFeatures = [
+    {
+      icon: Pill,
+      title: "Medication Schedule",
+      description: "Smart reminders with dosage and timing"
+    },
+    {
+      icon: Dumbbell,
+      title: "Exercise Routine",
+      description: "Safe, progressive exercises for your recovery"
+    },
+    {
+      icon: UtensilsCrossed,
+      title: "Nutrition Plan",
+      description: "Cultural foods optimized for healing"
+    },
+    {
+      icon: Calendar,
+      title: "Appointments",
+      description: "Follow-up visits and scan scheduling"
+    }
   ];
 
   return (
@@ -59,178 +65,106 @@ export const PlanScreen = () => {
       {/* Header */}
       <div className="bg-gradient-primary p-4 text-primary-foreground">
         <h1 className="text-xl font-semibold">Recovery Plan</h1>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-primary-foreground/80 text-sm">{recoveryPlan.procedure}</p>
-          <Badge className="bg-white/20 text-primary-foreground">
-            Day {recoveryPlan.daysSinceOp} of {recoveryPlan.totalDays}
-          </Badge>
-        </div>
+        <p className="text-primary-foreground/80 text-sm">
+          Set up your personalized recovery journey
+        </p>
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Recovery Progress */}
-        <Card className="p-4 shadow-card">
-          <h2 className="font-semibold text-card-foreground mb-4">Recovery Milestones</h2>
-          <div className="space-y-3">
-            {milestones.map((milestone, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  milestone.completed 
-                    ? "bg-success text-success-foreground" 
-                    : milestone.day === selectedDay
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+        {/* Setup Options */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Get Started</h2>
+          
+          {setupOptions.map((option, index) => (
+            <Card key={index} className="p-4 shadow-card hover:shadow-elevated transition-all duration-200">
+              <div className="flex items-start space-x-4">
+                <div className={`p-3 rounded-2xl ${
+                  option.primary 
+                    ? "bg-gradient-primary shadow-glow" 
+                    : "bg-muted"
                 }`}>
-                  {milestone.completed ? <CheckCircle2 size={16} /> : milestone.day}
+                  <option.icon className={`h-6 w-6 ${
+                    option.primary ? "text-primary-foreground" : "text-muted-foreground"
+                  }`} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">{milestone.title}</p>
-                  <p className="text-sm text-muted-foreground">{milestone.description}</p>
+                  <h3 className="font-medium text-card-foreground">{option.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{option.description}</p>
+                </div>
+                <Button 
+                  variant={option.primary ? "default" : "outline"}
+                  size="sm"
+                  className={option.primary ? "bg-gradient-primary hover:shadow-glow" : ""}
+                >
+                  {option.action}
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {/* What You'll Get */}
+        <Card className="p-4 shadow-card">
+          <h2 className="font-semibold text-card-foreground mb-4">Your Plan Will Include</h2>
+          <div className="space-y-4">
+            {planFeatures.map((feature, index) => (
+              <div key={index} className="flex items-start space-x-3">
+                <div className="bg-primary-soft p-2 rounded-lg">
+                  <feature.icon className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-sm">{feature.title}</h3>
+                  <p className="text-xs text-muted-foreground">{feature.description}</p>
                 </div>
               </div>
             ))}
           </div>
         </Card>
 
-        {/* Today's Plan */}
-        <Tabs defaultValue="medications" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="medications" className="text-xs">
-              <Pill size={14} className="mr-1" />
-              Meds
-            </TabsTrigger>
-            <TabsTrigger value="exercises" className="text-xs">
-              <Dumbbell size={14} className="mr-1" />
-              Exercise
-            </TabsTrigger>
-            <TabsTrigger value="diet" className="text-xs">
-              <UtensilsCrossed size={14} className="mr-1" />
-              Diet
-            </TabsTrigger>
-            <TabsTrigger value="appointments" className="text-xs">
-              <Calendar size={14} className="mr-1" />
-              Visits
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="medications" className="space-y-3">
-            {dayPlan.medications.map((med, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium">{med.name}</h3>
-                    <p className="text-sm text-muted-foreground">{med.timing}</p>
-                    <div className="flex items-center space-x-2 mt-2">
-                      {med.withFood && (
-                        <Badge variant="secondary" className="text-xs">With food</Badge>
-                      )}
-                      <Badge variant="outline" className="text-xs">
-                        {med.remaining} pills left
-                      </Badge>
-                    </div>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    <CheckCircle2 size={14} className="mr-1" />
-                    Taken
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="exercises" className="space-y-3">
-            {dayPlan.exercises.map((exercise, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium">{exercise.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {exercise.duration} • {exercise.frequency}
-                    </p>
-                    <Badge 
-                      variant="secondary" 
-                      className="mt-2 text-xs bg-success-soft text-success-foreground"
-                    >
-                      {exercise.difficulty}
-                    </Badge>
-                  </div>
-                  <Button size="sm" className="bg-gradient-primary">
-                    Start
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="diet" className="space-y-3">
-            {dayPlan.diet.map((meal, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <h3 className="font-medium">{meal.meal}</h3>
-                      <Badge variant="outline" className="text-xs">{meal.time}</Badge>
-                    </div>
-                    <ul className="text-sm text-muted-foreground mt-1 space-y-1">
-                      {meal.items.map((item, i) => (
-                        <li key={i}>• {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="appointments" className="space-y-3">
-            {dayPlan.appointments.map((appointment, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium">{appointment.type}</h3>
-                    <p className="text-sm text-muted-foreground">{appointment.doctor}</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
-                      <div className="flex items-center space-x-1">
-                        <Calendar size={12} />
-                        <span>{appointment.date}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Clock size={12} />
-                        <span>{appointment.time}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <MapPin size={12} />
-                        <span>{appointment.location}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <Button size="sm" variant="outline">
-                    Reschedule
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </TabsContent>
-        </Tabs>
-
-        {/* Red Flag Warning */}
-        <Card className="p-4 bg-danger-soft border-danger">
+        {/* Sample Timeline */}
+        <Card className="p-4 bg-muted border-0">
           <div className="flex items-start space-x-3">
-            <AlertCircle size={20} className="text-danger mt-0.5" />
-            <div className="flex-1">
-              <h3 className="font-medium text-danger-foreground">Watch for Warning Signs</h3>
-              <ul className="text-sm text-danger-foreground/80 mt-1 space-y-1">
-                <li>• Severe pain (8+ on scale)</li>
-                <li>• Fever above 101°F</li>
-                <li>• Excessive bleeding or discharge</li>
-                <li>• Persistent nausea/vomiting</li>
-              </ul>
+            <Clock className="h-5 w-5 text-muted-foreground mt-1" />
+            <div>
+              <h3 className="font-medium text-muted-foreground">Sample Recovery Timeline</h3>
+              <div className="mt-2 space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-success rounded-full" />
+                  <span>Day 1-3: Rest & basic mobility</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-warning rounded-full" />
+                  <span>Day 4-7: Light activities & wound care</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-primary rounded-full" />
+                  <span>Week 2+: Progressive recovery</span>
+                </div>
+              </div>
             </div>
-            <Button size="sm" className="bg-danger hover:bg-danger/90">
-              Call Hospital
-            </Button>
           </div>
         </Card>
+
+        {/* Benefits */}
+        <Card className="p-4 bg-success-soft border-success">
+          <h3 className="font-medium text-success-foreground mb-2">
+            Why SurgiNext Works
+          </h3>
+          <ul className="text-sm text-success-foreground/80 space-y-1">
+            <li>• 89% faster recovery vs traditional care</li>
+            <li>• Reduces hospital calls by 67%</li>
+            <li>• Personalized for Indian patients</li>
+            <li>• Available in 10+ regional languages</li>
+          </ul>
+        </Card>
+
+        {/* CTA */}
+        <div className="text-center pt-4">
+          <Button size="lg" className="w-full bg-gradient-primary hover:shadow-glow">
+            <Stethoscope className="mr-2 h-5 w-5" />
+            Start My Recovery Plan
+          </Button>
+        </div>
       </div>
     </div>
   );
